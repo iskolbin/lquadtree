@@ -9,7 +9,7 @@ QuadTree.make( width, height, levels = 3 )
 
 Create new quad tree structure. To optimize spatial queries `levels` variable
 defines the number of spatial subdivisions, for example `levels = 3` (default)
-divide domain in 64 rectangles.
+will divide domain in 64 rectangles.
 
 Optimal value of `levels` highly depends on the task, especially on the average
 size of spatial objects. Good approximation is size of the smallest subdivision
@@ -17,7 +17,7 @@ is x2 of average size of object, for example for 32x32 px object for 1920x1080
 field 5 levels will be ok, size of leaf will be 60x33,75.
 
 As you already guessed it will perform badly if you have lots of highly
-different size objects. While internally this is a quadtree, it performs like
+different sized objects. While internally this is a quadtree, it performs like
 spatial hashing schemes.
 
 QuadTree.insert( qt, x, y, width, height )
