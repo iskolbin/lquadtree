@@ -37,7 +37,7 @@ QuadTree.update( qt, rid, nx = rid[1], ny = rid[2], nw = rid[3]-rid[1], nh = rid
 
 Updates entity with `rid` in the tree. Essentially this is `remove` followed by
 `insert` without new id generation. In the future this method must be optimized
-by not touching overlaping part. Returns updated tree and updated table for
+by not touching overlaping part. Returns updated tree and updated `rid` table for
 `remove`/`update`.
 
 QuadTree.get( qt, x, y, width = 0, height = 0 )
