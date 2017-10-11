@@ -1,4 +1,4 @@
-local QuadTree = {}
+local QuadTree = { SIGNATURE = 'PersistentQuadTree' }
 
 local pairs = _G.pairs
 
@@ -21,7 +21,7 @@ end
 function QuadTree.make( width, height, levels )
 	levels = levels or 3
 	return {
-		id = 'QuadTree',
+		type = QuadTree.SIGNATURE,
 		root = makeNodes( levels ),
 		idcounter = 0,
 		width = width,
@@ -138,6 +138,10 @@ end
 
 function QuadTree.intersects( rectid1, rectid2 )
 	return rectid1[1] <= rectid2[3] and rectid1[2] <= rectid2[4] and rectid1[3] >= rectid2[1] and rectid1[4] >= rectid2[2]
+end
+
+function QuadTree.id( rectid )
+	return rectid[5]
 end
 
 return QuadTree
