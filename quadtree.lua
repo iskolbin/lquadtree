@@ -126,8 +126,18 @@ function QuadTree.update( self, rectid, nx, ny, nw, nh )
 	return QuadTree.insert( QuadTree.remove( self, rectid ), nx, ny, nw, nh )
 end
 
-function QuadTree.get( self, x, y, w, h, result )
-	return queryGet( self.root, self.levels, 0, 0, self.width, self.height, x, y, x+(w or 0), y+(h or 0), result or {} )
+function QuadTree.get( self, x, y, w, h )
+	return queryGet( self.root, self.levels, 0, 0, self.width, self.height, x, y, x+(w or 0), y+(h or 0), {} )
+end
+
+function QuadTree.neighbors( self, rectid )
+	local result = queryGet( self.root, self.levels, 0, 0, self.width, self.height, rectid[1], rectid[2], rectid[3], rectid[4], {} )
+	result[rectid[5]] = nil
+	return result
+end
+
+function QuadTree.intersects( rectid1, rectid2 )
+	return rectid1[1] <= rectid2[3] and rectid1[2] <= rectid2[4] and rectid1[3] >= rectid2[1] and rectid1[4] >= rectid2[2]
 end
 
 return QuadTree

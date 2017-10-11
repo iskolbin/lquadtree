@@ -44,3 +44,15 @@ QuadTree.get( qt, x, y, width = 0, height = 0 )
 Gets all entities stored in leaf rectangles overlapping with specified rectangle
 (or point). Returns table filled with id as key-value pairs (not array). After
 that you have to filter properly.
+
+QuadTree.neighbors( qt, rid )
+-----------------------------
+
+Get ids of all entities in the cells in which the `rid` entity is located
+(without `rid` itself). This is suitable for broadphase of collision detection
+algorithm.
+
+QuadTree.intersects( rid1, rid2 )
+---------------------------------
+
+Checks rectangles specified by `rid1` and `rid2` for intersection.

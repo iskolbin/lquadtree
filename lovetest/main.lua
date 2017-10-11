@@ -27,18 +27,9 @@ function love.update( dt )
 	collisions = {}
 	for id, objvxvy in pairs( objects ) do
 		local obj = objects[id][1]
-		local ids = QuadTree.get( tree, obj[1], obj[2], obj[3]-obj[1], obj[4]-obj[2] )
-		for id_, _ in pairs( ids ) do
-			if id ~= id_ then
-				local obj_ = objects[id_]
-				if not objects[id_] then
-					print( 'error', id_ )
-				else
-					obj_ = obj_[1]
-					if obj[1] <= obj_[3] and obj[2] <= obj_[4] and obj[3] >= obj_[1] and obj[4] >= obj_[2] then
-						collisions[id] = (collisions[id] or 0) + 1
-					end
-				end
+		for id_,_ in pairs( QuadTree.neighbors( tree, obj )) do
+			if QuadTree.intersects( obj, objects[id_][1] ) then
+				collisions[id] = (collisions[id] or 0) + 1
 			end
 		end
 	end
