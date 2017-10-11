@@ -1,5 +1,7 @@
 local QuadTree = {}
 
+local pairs, floor = _G.pairs, math.floor
+
 local function makeNodes( levels )
 	if levels <= 0 then
 		return {}
@@ -21,10 +23,11 @@ function QuadTree.make( width, height, levels )
 	return {
 		id = 'QuadTree',
 		root = makeNodes( levels ),
-		id = 0,
+		idcounter = 0,
 		width = width,
 		height = height,
-		levels = levels
+		levels = levels,
+		cellsize = {width/2^levels,height/2^levels}
 	}
 end
 
@@ -98,18 +101,18 @@ local function remove( node, rectid )
 	return node_
 end
 
--- TODO
--- optimze: we should not touch overlapping cells, this will reduce GC work on magnitude scale
-local function queryUpdate( node, level, x, y, w, h, rectid, nrectid )
-	return queryModify( queryModify( node, level, x, y, w, h, rectid, remove ), x, y, w, h, nrectid, insert )
-end
-
-function QuadTree.insert( self, x, y, w, h )
+function QuadTree.insert( self, x, y, w, h, cx0, cy0, cx1, cy1 )
 	local o = copy( self )
-	o.id = o.id+1
-	local rectid = {x, y, x+w, y+h, o.id}
-	o.root = queryModify( o.root, self.levels, 0, 0, self.width, self.height, rectid, insert )
-	return o, rectid
+	local id = o.idcounter+1
+	if id < 2^52 then
+		local cellsize = self.cellsize
+		local rectid = {x, y, x+w, y+h, id, cx0 or floor(x/cellsize[1]), cy0 or floor(y/cellsize[2]), cx1 or floor((x+w)/cellsize[1]), cy1 or floor((y+h)/cellsize[2])}
+		o.root = queryModify( o.root, self.levels, 0, 0, self.width, self.height, rectid, insert )
+		o.idcounter = id
+		return o, rectid
+	else
+		return nil
+	end
 end
 
 function QuadTree.remove( self, rectid )
@@ -119,10 +122,15 @@ function QuadTree.remove( self, rectid )
 end
 
 function QuadTree.update( self, rectid, nx, ny, nw, nh )
+	local cellsize = self.cellsize
+	local cx0, cy0 = floor( nx/cellsize[1] ), floor( ny/cellsize[2] )
 	nx, ny, nw, nh = nx or rectid[1], ny or rectid[2], nw or (rectid[3]-rectid[1]), nh or (rectid[4]-rectid[2])
-	local o, nrectid = copy( self ), {nx, ny, nx+nw, ny+nh, rectid[5]}
-	o.root = queryUpdate( self, self.levels, 0, 0, self.width, self.height, rectid, nrectid )
-	return o, nrectid
+	local cx1, cy1 = floor( (nx+nw)/cellsize[1] ), floor( (ny+nh)/cellsize[2] )
+	if cx0 ~= rectid[6] or cy0 ~= rectid[7] or cx1 ~= rectid[8] or cy1 ~= rectid[9] then
+		return QuadTree.insert( QuadTree.remove( self, rectid ), nx, ny, nw, nh, cx0, cy0, cx1, cy1 )
+	else
+		return self, {nx, ny, nx+nw, ny+nh, rectid[5], cx0, cy0, cx1, cy1}
+	end
 end
 
 function QuadTree.get( self, x, y, w, h, result )
