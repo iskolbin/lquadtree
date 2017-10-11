@@ -56,3 +56,8 @@ QuadTree.intersects( rid1, rid2 )
 ---------------------------------
 
 Checks rectangles specified by `rid1` and `rid2` for intersection.
+
+QuadTree.id( rid )
+------------------
+
+Returns `id` from `rid`.
