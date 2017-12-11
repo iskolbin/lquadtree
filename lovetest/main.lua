@@ -63,12 +63,12 @@ function love.draw()
 		drawRect( 'fill', obj[1], obj[2], obj[3]-obj[1], obj[4]-obj[2] )
 	end
 	setColor( 255, 255, 255, 192 )
-	drawRect( 'fill', 0, 0, 150, 60 )
+	drawRect( 'fill', 0, 0, 150, 80 )
 	setColor( 0, 0, 0, 255 )
 	love.graphics.print( 'mem(kb): ' .. math.floor(collectgarbage('count')), 5, 5 )
 	love.graphics.print( 'objects: ' .. nobjs, 5, 25 )
 	love.graphics.print( 'fps: ' .. love.timer.getFPS(), 5, 45 )
-
+	love.graphics.print( 'id: ' .. (tree.prefix and tree.prefix .. '.' or '') .. tree.idcounter, 5, 65 )
 end
 
 function love.mousepressed( x, y, button )

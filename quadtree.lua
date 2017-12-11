@@ -104,15 +104,27 @@ end
 function QuadTree.insert( self, x, y, w, h )
 	local o = copy( self )
 	local id = o.idcounter+1
-	if id < 2^52 then
-		local rectid = {x, y, x+w, y+h, id}
-		o.root = queryModify( o.root, self.levels, 0, 0, self.width, self.height, rectid, insert )
-		o.idcounter = id
-		return o, rectid
+	local rectid = {x, y, x+w, y+h, 0}
+	if not self.prefix then
+		if id < 2^52 then
+			o.idcounter = id
+		else
+			o.prefix = 0
+			o.idcounter = 0
+			id = '0.0'
+		end
 	else
-		-- TODO
-		return nil -- and?
+		if id < 2^52 then
+			o.idcounter = id
+		else
+			o.idcounter = 0
+			o.prefix = o.prefix + 1
+		end
+		id = o.prefix .. '.' .. id
 	end
+	rectid[5] = id
+	o.root = queryModify( o.root, self.levels, 0, 0, self.width, self.height, rectid, insert )
+	return o, rectid
 end
 
 function QuadTree.remove( self, rectid )
