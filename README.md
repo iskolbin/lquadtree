@@ -4,8 +4,9 @@ Quad Tree
 Persistent quad tree implementation for Lua for fast spatial queries. It's more
 like persistent spatial hash structure actually. All operations are non-mutating.
 
-QuadTree.make( width, height, levels = 3 )
-------------------------------------------
+### make( width, height[, levels] ) -> QuadTree
+
+> default levels = 3
 
 Create new quad tree structure. To optimize spatial queries `levels` variable
 defines the number of spatial subdivisions, for example `levels = 3` (default)
@@ -20,44 +21,41 @@ As you already guessed it will perform badly if you have lots of highly
 different sized objects. While internally this is a quadtree, it performs like
 spatial hashing schemes.
 
-QuadTree.insert( qt, x, y, width, height )
-------------------------------------------
+### insert( QuadTree, x, y, width, height ) -> QuadTree, rid
 
 Inserts new rectangle in the tree and updates internal `id` counter. Returns
-updated tree and table (`rid`:  `x0`, `y0`, `x1`, y1 and `id` 5-element table)
-which can be used for `remove` and `update`.
+updated tree and table (`rid = {x0,y0,x1,y1,id}` which can be used for `remove`
+and `update`.
 
-QuadTree.remove( qt, rid )
---------------------------
+### remove( QuadTree, rid ) -> QuadTree
 
 Removes entity specified by `rid` with  from the tree. Returns updated tree.
 
-QuadTree.update( qt, rid, nx = rid[1], ny = rid[2], nw = rid[3]-rid[1], nh = rid[4]-rid[2] )
---------------------------------------------------------------------------------------------
+### update( QuadTree, rid[, x, y, width, height] ) -> QuadTree, rid
+
+> default x, y, width and height will be taken from rid
 
 Updates entity with `rid` in the tree. Essentially this is `remove` followed by
 `insert`.
 
-QuadTree.get( qt, x, y, width = 0, height = 0 )
------------------------------------------------
+### get( QuadTree, x, y[, width, height] ) -> {id: id}
 
-Gets all entities stored in leaf rectangles overlapping with specified rectangle
+> default width and height are 0 (point)
+
+Gets all entities stored in the leaf rectangles overlapping with specified rectangle
 (or point). Returns table filled with id as key-value pairs (not array). After
 that you have to filter properly.
 
-QuadTree.neighbors( qt, rid )
------------------------------
+### neighbors( QuadTree, rid ) -> {id: id}
 
 Get ids of all entities in the cells in which the `rid` entity is located
 (without `rid` itself). This is suitable for broadphase of collision detection
 algorithm.
 
-QuadTree.intersects( rid1, rid2 )
----------------------------------
+### intersects( rid1, rid2 ) -> boolean
 
 Checks rectangles specified by `rid1` and `rid2` for intersection.
 
-QuadTree.id( rid )
-------------------
+### id( rid ) -> id
 
-Returns `id` from `rid`.
+Returns `id` from `rid` (5-th element).
