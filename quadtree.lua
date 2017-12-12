@@ -1,6 +1,6 @@
 --[[
 
- quadtree -- v1.0.0 public domain persistent structure for fast spatial queries
+ quadtree -- v1.0.1 public domain persistent structure for fast spatial queries
  no warranty implied; use at your own risk
 
  author: Ilya Kolbin (iskolbin@gmail.com)
