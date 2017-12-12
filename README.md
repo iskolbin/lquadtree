@@ -1,11 +1,11 @@
 Quad Tree
 =========
 
-Persistent quad tree implementation for Lua. It's more like persistent spatial
-hash structure actually. All operations are non-mutating.
+Persistent quad tree implementation for Lua for fast spatial queries. It's more
+like persistent spatial hash structure actually. All operations are non-mutating.
 
 QuadTree.make( width, height, levels = 3 )
---------------------------------------------
+------------------------------------------
 
 Create new quad tree structure. To optimize spatial queries `levels` variable
 defines the number of spatial subdivisions, for example `levels = 3` (default)
@@ -24,8 +24,8 @@ QuadTree.insert( qt, x, y, width, height )
 ------------------------------------------
 
 Inserts new rectangle in the tree and updates internal `id` counter. Returns
-updated tree and table (`rid`:  x0, y0, x1, y1 and id 5-element table) which
-can be used for `remove` and `update`.
+updated tree and table (`rid`:  `x0`, `y0`, `x1`, y1 and `id` 5-element table)
+which can be used for `remove` and `update`.
 
 QuadTree.remove( qt, rid )
 --------------------------
