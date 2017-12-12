@@ -82,7 +82,7 @@ function love.mousepressed( x, y, button )
 		end
 	elseif button == 2 then
 		local tree_, todelete = tree, {}
-		for id, _ in pairs( QuadTree.get( tree, x, y )) do
+		for id in pairs( QuadTree.get( tree, x, y )) do
 			local objvxvy = objects[id]
 			local obj = objvxvy[1]
 			if x >= obj[1] and y >= obj[2] and x <= obj[3] and y <= obj[4] then

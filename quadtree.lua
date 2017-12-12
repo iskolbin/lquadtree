@@ -1,3 +1,23 @@
+--[[
+
+ quadtree -- v1.0.0 public domain persistent structure for fast spatial queries
+ no warranty implied; use at your own risk
+
+ author: Ilya Kolbin (iskolbin@gmail.com)
+ url: github.com/iskolbin/lquadtree
+
+ COMPATIBILITY
+
+ Lua 5.1, 5.2, 5.3, LuaJIT 1, 2
+
+ LICENSE
+
+ This software is dual-licensed to the public domain and under the following
+ license: you are granted a perpetual, irrevocable license to copy, modify,
+ publish, and distribute this file as you see fit.
+
+--]]
+
 local QuadTree = { SIGNATURE = 'PersistentQuadTree' }
 
 local pairs = _G.pairs
